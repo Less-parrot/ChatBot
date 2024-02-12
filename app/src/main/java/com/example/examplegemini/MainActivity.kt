@@ -1,6 +1,7 @@
 package com.example.examplegemini
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -29,11 +30,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.ai.client.generativeai.GenerativeModel
 import com.example.examplegemini.ui.theme.ExampleGeminiTheme
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,11 +79,14 @@ fun SummarizeScreen(
         uiState: SummarizeUiState = SummarizeUiState.Initial,
         onSummarizeClicked: (String) -> Unit = {}
 ) {
+
+
     var prompt by remember { mutableStateOf("") }
+
     Column(
             modifier = Modifier
-                    .padding(all = 8.dp)
-                    .verticalScroll(rememberScrollState())
+                .padding(all = 8.dp)
+                .verticalScroll(rememberScrollState())
     ) {
         Row {
             TextField(
@@ -96,9 +105,9 @@ fun SummarizeScreen(
                     },
 
                     modifier = Modifier
-                            .weight(2f)
-                            .padding(all = 4.dp)
-                            .align(Alignment.CenterVertically)
+                        .weight(2f)
+                        .padding(all = 4.dp)
+                        .align(Alignment.CenterVertically)
             ) {
                 Text(stringResource(R.string.action_go))
             }
@@ -107,41 +116,47 @@ fun SummarizeScreen(
             SummarizeUiState.Initial -> {
                 // Nothing is shown
             }
-
             SummarizeUiState.Loading -> {
                 Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                                .padding(all = 8.dp)
-                                .align(Alignment.CenterHorizontally)
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                        .align(Alignment.CenterHorizontally)
                 ) {
                     CircularProgressIndicator()
                 }
             }
 
             is SummarizeUiState.Success -> {
+
                 Row(modifier = Modifier.padding(all = 8.dp)) {
                     Icon(
-                            Icons.Outlined.Person,
-                            contentDescription = "Person Icon"
+                        Icons.Outlined.Person,
+                        contentDescription = "Person Icon"
                     )
-                    Text(
-                            text = uiState.outputText,
-                            modifier = Modifier.padding(horizontal = 8.dp)
+
+                    MarkdownText(
+                        markdown = uiState.outputText,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            lineHeight = 10.sp,
+                            textAlign = TextAlign.Justify,
+                        )
                     )
+
                 }
+
             }
 
-            is SummarizeUiState.Error -> {
-                Text(
-                        text = uiState.errorMessage,
-                        color = Color.Red,
-                        modifier = Modifier.padding(all = 8.dp)
-                )
-            }
+            is SummarizeUiState.Error -> MarkdownText(markdown = uiState.errorMessage)
+
         }
     }
+
 }
+
+
 
 @Composable
 @Preview(showSystemUi = true)

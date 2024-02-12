@@ -50,6 +50,7 @@ android {
 
 dependencies {
 
+    implementation("com.github.jeziellago:compose-markdown:0.4.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
