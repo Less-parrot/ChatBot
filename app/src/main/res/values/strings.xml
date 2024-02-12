@@ -2,5 +2,5 @@
     <string name="app_name">ExampleGemini</string>
     <string name="action_go">Enviar</string>
     <string name="summarize_label">Preguntame</string>
-    <string name="summarize_hint">Ingresa tu pregunsta</string>
+    <string name="summarize_hint">Ingresa tu pregunta</string>
 </resources>
